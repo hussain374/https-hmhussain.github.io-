@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bangladesh Clock with Bootstrap</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <style>
+    :root {
+      --bg-color: #222;
+      --clock-bg: #000;
+      --text-color: #fff;
+    }
+    body.light-mode {
+      --bg-color: #f8f9fa;
+      --clock-bg: #fff;
+      --text-color: #000;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: .3s;
+    }
+    .clock-card {
+      background: var(--clock-bg);
+      border-radius: 50%;
+      padding: 1.5rem;
+      width: 320px;
+      height: 320px;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(0,0,0,.3);
+    }
+    .hand { position: absolute; bottom:50%; left:50%; transform-origin:bottom center; transform:translateX(-50%) rotate(90deg); }
+    .hour { width:6px; height:70px; background:var(--text-color); z-index:3; }
+    .minute { width:4px; height:100px; background:#ccc; z-index:2; }
+    .second { width:2px; height:110px; background:red; z-index:1; }
+    .center-dot { position: absolute; top:50%; left:50%; width:14px; height:14px; background:var(--text-color); border-radius:50%; transform:translate(-50%,-50%); z-index:4; }
+    .number { position:absolute; width:30px; height:30px; text-align:center; line-height:30px; font-size:18px; color:var(--text-color); transform:translate(-50%,-50%); }
+    .mode-btn { margin:1rem 0; }
+    .footer-text {
+      font-size:1.25rem;
+      font-weight:600;
+      color:#00d1b2;
+      text-shadow:1px 1px 4px rgba(0,209,178,.6);
+    }
+  </style>
+</head>
+<body class="d-flex flex-column align-items-center py-5">
+
+  <div class="container text-center mb-4">
+    <h1 class="display-6 text-info">Assalamu Alaikum! Welcome to my new website</h1>
+    <p class="lead text-warning">This is my third website design</p>
+  </div>
+
+  <div class="clock-card" id="clock">
+    <div class="center-dot"></div>
+    <div class="hand hour" id="hour-hand"></div>
+    <div class="hand minute" id="minute-hand"></div>
+    <div class="hand second" id="second-hand"></div>
+  </div>
+
+  <button class="btn btn-outline-light mode-btn" onclick="toggleMode()" id="modeBtn">Dark Mode</button>
+
+  <div class="footer-text mt-4">
+    This design is created by HM Hussain
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <script>
+    const clock = document.getElementById("clock");
+    for (let n = 1; n <= 12; n++) {
+      const num = document.createElement("div");
+      num.className = "number";
+      num.innerText = n;
+      const ang = (n-3)*30;
+      const r = 130;
+      const x = 160 + r*Math.cos(ang*Math.PI/180);
+      const y = 160 + r*Math.sin(ang*Math.PI/180);
+      num.style.left = x + "px";
+      num.style.top = y + "px";
+      clock.appendChild(num);
+    }
+
+    const h = document.getElementById("hour-hand");
+    const m = document.getElementById("minute-hand");
+    const s = document.getElementById("second-hand");
+    function update() {
+      const now = new Date();
+      s.style.transform = `translateX(-50%) rotate(${now.getSeconds()*6}deg)`;
+      m.style.transform = `translateX(-50%) rotate(${now.getMinutes()*6 + now.getSeconds()*0.1}deg)`;
+      h.style.transform = `translateX(-50%) rotate(${(now.getHours()%12)*30 + now.getMinutes()*0.5}deg)`;
+    }
+    setInterval(update,1000);
+    update();
+
+    function toggleMode() {
+      document.body.classList.toggle("light-mode");
+      const btn = document.getElementById("modeBtn");
+      if (document.body.classList.contains("light-mode")) {
+        btn.textContent = "Light Mode";
+        btn.classList.replace("btn-outline-light","btn-outline-dark");
+      } else {
+        btn.textContent = "Dark Mode";
+        btn.classList.replace("btn-outline-dark","btn-outline-light");
+      }
+    }
+  </script>
+</body>
+</html>
